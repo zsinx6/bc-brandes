@@ -14,13 +14,13 @@ typedef struct node_list{
 typedef struct graph{
     int n_edges;
     int n_nodes;
-    struct node_list *nodes;
+    struct node_list **nodes;
 } graph;
 
 void create_graph(graph **, int, int);
 
 void destroy_graph(graph **);
 
-void create_edge(graph **, int, int);
+void add_edge(graph **, int, int);
 
 #endif
