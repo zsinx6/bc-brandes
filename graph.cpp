@@ -15,8 +15,8 @@ void create_graph(graph **g, int n_nodes, int n_edges){
 
 void destroy_graph(graph **g){
     adjacent_node *node = NULL, *node_prev = NULL;
-    for(int i=0; i<(*g)->n_nodes; i++){
-        for(int j=0; j<(*g)->nodes[i].degree; j++){
+    for(int i=0; i < (*g)->n_nodes; i++){
+        for(int j=0; j < (*g)->nodes[i].degree; j++){
             if(j==0){
                 node_prev = (*g)->nodes[i].edges;
             }
