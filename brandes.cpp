@@ -4,7 +4,6 @@
 #include <queue>
 #include <stack>
 #include <vector>
-#include <iostream>
 #include "graph.h"
 
 void read_graph(graph **g, FILE *input){
@@ -16,17 +15,17 @@ void read_graph(graph **g, FILE *input){
     }
 }
 
-void brandes(graph **g, double *Cb){
+void brandes(graph **g, long double *Cb){
     int n_nodes = -1, *d = NULL, *sigma = NULL, v = -1, w = -1;
     int i = -1, s = -1;
-    double *delta = NULL;
+    long double *delta = NULL;
     std::stack<int> S;
     std::queue<int> Q;
     std::vector< std::vector<int> > P;
     adjacent_node *node = NULL;
     n_nodes = (*g)->n_nodes;
     sigma = (int*) malloc(n_nodes*sizeof(int));
-    delta = (double*) malloc(n_nodes*sizeof(double));
+    delta = (long double*) malloc(n_nodes*sizeof(long double));
     d = (int*) malloc(n_nodes*sizeof(int));
     for(int i=0; i < n_nodes; i++){
         P.push_back(std::vector<int>());
@@ -96,10 +95,12 @@ void brandes(graph **g, double *Cb){
 }
 
 int main(int argc, char *argv[]){
-    FILE *input = NULL;
+    FILE *input = NULL, *output = NULL;
     int n_nodes = -1, n_edges = -1;
+    int ext_pos = 0;
+    char output_name[150];
     graph *g = NULL;
-    double *Cb = NULL;
+    long double *Cb = NULL;
 
     if(argc != 2){
         printf("Expected a FILE as argument\nfor example: 'brandes input.txt'\n");
@@ -110,33 +111,44 @@ int main(int argc, char *argv[]){
         printf("cannot access '%s': No such file or directory\n", argv[1]);
         return 0;
     }
+    else{
+        ext_pos = strlen(argv[1]);
+        for(unsigned int i=0; i < strlen(argv[1]); i++){
+            if(argv[1][i] == '.'){
+                if(i != strlen(argv[1]) - 1){
+                    ext_pos = i;
+                }
+                break;
+            }
+        }
+        for(int i=0; i < ext_pos; i++){
+            output_name[i] = argv[1][i];
+        }
+        output_name[ext_pos] = '.';
+        output_name[ext_pos+1] = 'b';
+        output_name[ext_pos+2] = 't';
+        output_name[ext_pos+3] = 'w';
+        output_name[ext_pos+4] = '\0';
+    }
 
     fscanf(input, "%d", &n_nodes);
     fscanf(input, "%d", &n_edges);
-    Cb = (double*) malloc(n_nodes*sizeof(double));
+    Cb = (long double*) malloc(n_nodes*sizeof(long double));
     for(int i=0; i < n_nodes; i++){
         Cb[i] = 0;
     }
     create_graph(&g, n_nodes, n_edges);
     read_graph(&g, input);
-
-    adjacent_node *node = NULL;
-    for(int i=0; i<n_nodes; i++){
-        node = g->nodes[i]->edges;
-        printf("%d:", i);
-        while(node != NULL){
-            printf(" %d", node->id);
-            node = node->next;
-        }
-        printf("\n");
-    }
+    fclose(input);
 
     brandes(&g, Cb);
-    for(int i=0; i < n_nodes; i++){
-        printf("%lf\n", Cb[i]);
-    }
 
-    fclose(input);
+    output = fopen(output_name, "w+");
+    for(int i=0; i < n_nodes; i++){
+        fprintf(output, "%Lf\n", Cb[i]);
+    }
+    fclose(output);
+
     destroy_graph(&g);
     free(Cb);
     return 0;
