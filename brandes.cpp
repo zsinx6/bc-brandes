@@ -89,6 +89,9 @@ void brandes(graph **g, long double *Cb){
             }
         }
     }
+    for(i=0; i < n_nodes; i++){
+        Cb[i] = Cb[i]/2;
+    }
     free(sigma);
     free(delta);
     free(d);
@@ -135,7 +138,7 @@ int main(int argc, char *argv[]){
     fscanf(input, "%d", &n_edges);
     Cb = (long double*) malloc(n_nodes*sizeof(long double));
     for(int i=0; i < n_nodes; i++){
-        Cb[i] = 0;
+        Cb[i] = 0.0;
     }
     create_graph(&g, n_nodes, n_edges);
     read_graph(&g, input);
