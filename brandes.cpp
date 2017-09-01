@@ -15,10 +15,11 @@ void read_graph(graph **g, FILE *input){
     }
 }
 
-void brandes(graph **g, long double *Cb){
+long double * brandes(graph **g){
     int n_nodes = -1, *d = NULL, *sigma = NULL, v = -1, w = -1;
     int i = -1, s = -1;
     long double *delta = NULL;
+    long double *Cb = NULL;
     std::stack<int> S;
     std::queue<int> Q;
     std::vector< std::vector<int> > P;
@@ -27,7 +28,11 @@ void brandes(graph **g, long double *Cb){
     sigma = (int*) malloc(n_nodes*sizeof(int));
     delta = (long double*) malloc(n_nodes*sizeof(long double));
     d = (int*) malloc(n_nodes*sizeof(int));
-    for(int i=0; i < n_nodes; i++){
+    Cb = (long double*) malloc(n_nodes*sizeof(long double));
+    for(i=0; i < n_nodes; i++){
+        Cb[i] = 0.0;
+    }
+    for(i=0; i < n_nodes; i++){
         P.push_back(std::vector<int>());
     }
     for(s=0; s < n_nodes; s++){
@@ -95,6 +100,7 @@ void brandes(graph **g, long double *Cb){
     free(sigma);
     free(delta);
     free(d);
+    return Cb;
 }
 
 int main(int argc, char *argv[]){
@@ -136,15 +142,11 @@ int main(int argc, char *argv[]){
 
     fscanf(input, "%d", &n_nodes);
     fscanf(input, "%d", &n_edges);
-    Cb = (long double*) malloc(n_nodes*sizeof(long double));
-    for(int i=0; i < n_nodes; i++){
-        Cb[i] = 0.0;
-    }
     create_graph(&g, n_nodes, n_edges);
     read_graph(&g, input);
     fclose(input);
 
-    brandes(&g, Cb);
+    Cb = brandes(&g);
 
     output = fopen(output_name, "w+");
     for(int i=0; i < n_nodes; i++){
