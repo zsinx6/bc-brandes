@@ -6,13 +6,23 @@
 #include <vector>
 #include "graph.h"
 
+
+void fscanf_error(){
+    printf("I/O error\n");
+    exit(1);
+}
+
 void read_graph(graph **g, FILE *input){
     /*
      * Read the input file and add the edges in the graph
      */
     int node_a = -1, node_b = -1;
+    int fscanf_return;
     for(int i=0; i < (*g)->n_edges; i++){
-        fscanf(input, "%d %d", &node_a, &node_b);
+        fscanf_return = fscanf(input, "%d %d", &node_a, &node_b);
+        if(fscanf_return == EOF){
+            fscanf_error();
+        }
         //node: the graph is undirected, then if the edge a->b exists
         //a edge b->a needs to be created too.
         add_edge(g, node_a, node_b); 
@@ -132,6 +142,7 @@ long double * brandes(graph **g){
 int main(int argc, char *argv[]){
     FILE *input = NULL, *output = NULL;
     int n_nodes = -1, n_edges = -1;
+    int fscanf_return1, fscanf_return2;
     int ext_pos = 0;
     //ext_pos is the position in the input file name of the extension
     //needed for changing to .btw
@@ -179,8 +190,11 @@ int main(int argc, char *argv[]){
     output_name[ext_pos+4] = '\0';
 
     //then the file begins to be read
-    fscanf(input, "%d", &n_nodes);
-    fscanf(input, "%d", &n_edges);
+    fscanf_return1 = fscanf(input, "%d", &n_nodes);
+    fscanf_return2 = fscanf(input, "%d", &n_edges);
+    if(fscanf_return1 == EOF || fscanf_return2 == EOF){
+        fscanf_error();
+    }
     create_graph(&g, n_nodes, n_edges);
     read_graph(&g, input);
     fclose(input);
