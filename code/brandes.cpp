@@ -8,6 +8,9 @@
 
 
 void fscanf_error(){
+    /*
+     * Function for print I/O error for fscanf
+     */
     printf("I/O error\n");
     exit(1);
 }
