@@ -23,7 +23,7 @@ typedef struct graph{
     /*
      * Main structure, stores the list of all vertices,
      * the number of edges and vertices
-     * graph->nodes is a aray of struct node_list, so in this
+     * graph->nodes is an array of struct node_list, so in this
      * implementation, to access a node i in the graph:
      * graph->nodes[i]
      */

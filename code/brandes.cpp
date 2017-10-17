@@ -27,7 +27,7 @@ void read_graph(graph **g, FILE *input){
             fscanf_error();
         }
         //node: the graph is undirected, then if the edge a->b exists
-        //a edge b->a needs to be created too.
+        //an edge b->a needs to be created too.
         add_edge(g, node_a, node_b); 
         add_edge(g, node_b, node_a); 
     }

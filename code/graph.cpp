@@ -11,7 +11,7 @@ void create_graph(graph **g, int n_nodes, int n_edges){
     (*g)->n_nodes = n_nodes;
     //it allocates the graph and initiates
     (*g)->nodes = (node_list**) malloc(n_nodes*sizeof(node_list*));
-    //then, the nodes field is allocated as a array of size equals to the
+    //then, the nodes field is allocated as an array of size equals to the
     //number of nodes in the graph
     for(int i=0; i < (*g)->n_nodes; i++){
         //for each node in the graph, its allocated a neighbors list
